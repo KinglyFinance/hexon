@@ -1,0 +1,5 @@
+/dist
+/coverage
+/.nx/cache
+/node_modules
+/.nx/workspace-data
