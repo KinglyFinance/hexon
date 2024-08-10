@@ -7,7 +7,7 @@ show_help() {
   echo "Arguments:"
   echo "  name    Package name"
   echo "  scope   Package scope (e.g., 'frontend', 'backend')"
-  echo "  --N     Disable the --no-interactive option"
+  echo "  --N     Disable the --dry-run option"
   echo
   echo "Example:"
   echo "  $0 my-package backend --N"
