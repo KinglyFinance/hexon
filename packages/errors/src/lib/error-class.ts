@@ -1,22 +1,54 @@
-import type { ErrorCode, ErrorData, ErrorParams, ErrorReason, ErrorScope } from './types';
+import { type Metadata } from '@hexon/generics';
+
+import type { ErrorCode, ErrorData, ErrorParams, ErrorScope } from './types';
+
+/**
+ * Error metadata that provides information about the error class.
+ */
+const metadata: Metadata = {
+  name: 'ErrorClass',
+  description: 'Hexon error class for error handling and logging.',
+  version: '0.2.0',
+};
 
 /**
  * Error base class that extends the native Error. It provides additional properties like scope,
- * code, reason, and data, useful for error handling and logging.
+ * code, and data, useful for error handling and logging.
+ *
+ * @note
+ * Do not use this class directly. Instead, use error factories to create new error
+ * instances.
  */
-export class ErrorClass<C extends ErrorCode, D extends ErrorData> extends Error {
-  public scope!: ErrorScope;
-  public code!: C;
-  public readonly reason?: ErrorReason;
+export class ErrorClass<
+  C extends ErrorCode,
+  S extends ErrorScope,
+  D extends ErrorData,
+> extends Error {
+  public readonly $metadata = metadata;
+  public readonly scope: S;
+  public readonly code: C;
   public readonly data?: D;
 
-  constructor(params: ErrorParams<D>) {
-    const { message, reason, data } = params;
+  /**
+   * Creates a new instance of the error class.
+   *
+   * @param scope - The scope of the error.
+   * @param code - The error code.
+   * @param params - The error parameters. This includes the message and data (if provided).
+   * @returns A new instance of the error class.
+   */
+  constructor(scope: S, code: C, params: ErrorParams<D>) {
+    super(params.message);
+    this.scope = scope;
+    this.code = code;
+    this.name = this.createErrorName(code);
 
-    super(message);
-    this.reason = reason;
-    this.data = data;
+    // Only if the data is provided, it is assigned to the error.
+    if ('data' in params) {
+      this.data = params.data as D;
+    }
   }
+
   /**
    * Creates a new error name based on the error code.
    *

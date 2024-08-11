@@ -1,27 +1,25 @@
 import { Either } from 'effect';
 
-import { ErrorClass } from '../lib';
+import { ErrorClass } from '../lib/error-class';
 import {
-  StringErrorClass,
   StringMaxLengthError,
   StringMinLengthError,
-  StringNotOnlyNumbersError,
+  StringOnlyNumbersError,
   stringValidationPipe,
 } from './utils';
 
 describe('Error', () => {
   it('Should create a new error class with the given type and code configuration', () => {
-    const error = new StringNotOnlyNumbersError({
+    const error = new StringOnlyNumbersError({
       message: 'A random message',
       data: { value: 'A test value' },
     });
 
     expect(error).toBeInstanceOf(ErrorClass);
-    expect(error).toBeInstanceOf(StringErrorClass);
-    expect(error).toBeInstanceOf(StringNotOnlyNumbersError);
+    expect(error).toBeInstanceOf(StringOnlyNumbersError);
     expect(error.scope).toBe('VALUE_OBJECT_ERROR');
-    expect(error.code).toBe('STRING_NOT_ONLY_NUMBERS_ERROR');
-    expect(error.name).toBe('StringNotOnlyNumbersError');
+    expect(error.code).toBe('STRING_ONLY_NUMBERS_ERROR');
+    expect(error.name).toBe(StringOnlyNumbersError.name);
     expect(error.message).toBe('A random message');
     expect(error.data).toEqual({ value: 'A test value' });
   });
@@ -36,8 +34,8 @@ describe('Error', () => {
     expect(Either.isLeft(invalidRegexError)).toEqual(true);
     if (Either.isLeft(invalidRegexError)) {
       const error = invalidRegexError.left;
-      expect(error).toBeInstanceOf(StringNotOnlyNumbersError);
-      expect(error.code).toEqual('STRING_NOT_ONLY_NUMBERS_ERROR');
+      expect(error).toBeInstanceOf(StringOnlyNumbersError);
+      expect(error.code).toEqual('STRING_ONLY_NUMBERS_ERROR');
     }
 
     // Second pipeline error.

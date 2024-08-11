@@ -1,41 +1,65 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ErrorClass } from './error-class';
-import type { ErrorCode, ErrorData, ErrorMapper, ErrorScope } from './types';
+import type { ErrorCode, ErrorData, ErrorMapper, ErrorParams, ErrorScope } from './types';
 
 /**
- * Decorator function that creates a new error class with the specified scope and code.
- *
- * @param scope - The error scope.
- * @param code - The error code.
- * @returns A new error class.
- */
-function ErrorDecorator<C extends ErrorCode, D extends ErrorData>(scope: ErrorScope, code: C) {
-  return function <T extends new (...args: any[]) => ErrorClass<C, D>>(constructor: T) {
-    return class extends constructor {
-      constructor(...args: any[]) {
-        super(...args);
-        this.scope = scope;
-        this.code = code;
-        this.name = this.createErrorName(code);
-      }
-    } as T;
-  };
-}
-
-/**
- * Creates for the given error codes a new error class and a decorator function. This function
- * is used to create a set of error classes with the same error data and scope.
+ * Creates for the given error mapper a new error factory function. It should be used to create a
+ * set of error classes with the same error data and scope.
  *
  * @param codes - The error codes mapping used to create the error classes.
- * @returns An object with the error class and the decorator function.
+ * @returns An custom error factory function which receives the specific error code and returns a
+ * new error class.
+ *
+ * @example
+ * ```ts
+ * // Error mapper for string errors.
+ * const StringErrorMapper = {
+ *    STRING_LENGTH_ERROR: 'VALUE_OBJECT_ERROR',
+ *    STRING_MIN_LENGTH_ERROR: 'VALUE_OBJECT_ERROR',
+ *    STRING_MAX_LENGTH_ERROR: 'VALUE_OBJECT_ERROR',
+ * } as const;
+ *
+ * // Data for string errors.
+ * type StringErrorData = {
+ * value: string;
+ * };
+ *
+ * // Factory for string errors.
+ * const StringErrorFactory = ErrorFactory<typeof StringErrorMapper, StringErrorData>(
+ * StringErrorMapper,
+ * );
+ *
+ * // Create a new error class for each error code.
+ * class StringLengthError extends StringErrorFactory('STRING_LENGTH_ERROR') {}
+ * class StringMinLengthError extends StringErrorFactory('STRING_MIN_LENGTH_ERROR') {}
+ * class StringMaxLengthError extends StringErrorFactory('STRING_MAX_LENGTH_ERROR') {}
+ *
+ * // Create a new error instance.
+ * const error = new StringLengthError({
+ *    message: 'The string length is invalid',
+ *    data: { value: 'test' }
+ * });
+ *
+ * // Check the error instance.
+ * console.log(error instanceof ErrorClass); // Output: true
+ * console.log(error instanceof StringLengthError); // Output: true
+ * console.log(error.scope); // Output: 'VALUE_OBJECT_ERROR'
+ * console.log(error.code); // Output: 'STRING_LENGTH_ERROR'
+ * console.log(error.data); // Output: { value: 'test' }
+ * console.log(error.message); // Output: 'The string length is invalid'
+ * console.log(error.name); // Output: 'StringLengthError'
+ * console.log(error.stack); // Output: Error stack trace
+ * ```
  */
-export function errorFactory<
-  D extends ErrorData,
-  M extends ErrorMapper,
-  C extends ErrorCode = keyof M extends ErrorCode ? keyof M : ErrorCode,
->(codes: M) {
-  return {
-    Error: class extends ErrorClass<C, D> {},
-    Decorator: (code: C) => ErrorDecorator<C, D>(codes[code] as ErrorScope, code),
-  };
+export function ErrorFactory<M extends ErrorMapper, D extends ErrorData = undefined>(codes: M) {
+  return <
+    C extends keyof M extends ErrorCode ? keyof M : ErrorCode,
+    S extends ErrorScope = M[C] extends ErrorScope ? M[C] : never,
+  >(
+    code: C,
+  ) =>
+    class Error extends ErrorClass<C, S, D> {
+      constructor(params: ErrorParams<D>) {
+        super(codes[code] as S, code, params);
+      }
+    };
 }

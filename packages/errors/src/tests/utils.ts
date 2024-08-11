@@ -1,10 +1,10 @@
 import { Either, pipe } from 'effect';
 import z from 'zod';
 
-import { errorFactory } from '../lib';
+import { ErrorFactory } from '../lib';
 
-const StringErrorCode = {
-  STRING_NOT_ONLY_NUMBERS_ERROR: 'VALUE_OBJECT_ERROR',
+const StringErrorCodeMapper = {
+  STRING_ONLY_NUMBERS_ERROR: 'VALUE_OBJECT_ERROR',
   STRING_MIN_LENGTH_ERROR: 'VALUE_OBJECT_ERROR',
   STRING_MAX_LENGTH_ERROR: 'VALUE_OBJECT_ERROR',
 } as const;
@@ -13,19 +13,15 @@ type StringErrorData = {
   value: string;
 };
 
-const { Decorator: StringError, Error: StringErrorClass } = errorFactory<
-  StringErrorData,
-  typeof StringErrorCode
->(StringErrorCode);
+const StringErrorFactory = ErrorFactory<typeof StringErrorCodeMapper, StringErrorData>(
+  StringErrorCodeMapper,
+);
 
-@StringError('STRING_NOT_ONLY_NUMBERS_ERROR')
-class StringNotOnlyNumbersError extends StringErrorClass {}
+class StringOnlyNumbersError extends StringErrorFactory('STRING_ONLY_NUMBERS_ERROR') {}
 
-@StringError('STRING_MIN_LENGTH_ERROR')
-class StringMinLengthError extends StringErrorClass {}
+class StringMinLengthError extends StringErrorFactory('STRING_MIN_LENGTH_ERROR') {}
 
-@StringError('STRING_MAX_LENGTH_ERROR')
-class StringMaxLengthError extends StringErrorClass {}
+class StringMaxLengthError extends StringErrorFactory('STRING_MAX_LENGTH_ERROR') {}
 
 const onlyNumbersRegex = /^[0-9]+$/;
 
@@ -35,7 +31,7 @@ const validateOnlyNumbers = (value: string) =>
     Either.liftPredicate(
       (isValid) => isValid.success,
       () =>
-        new StringNotOnlyNumbersError({
+        new StringOnlyNumbersError({
           message: 'Not only numbers',
           data: { value },
         }),
@@ -76,10 +72,4 @@ const stringValidationPipe = (value: string, min: number, max: number) =>
     Either.andThen(() => validateMaxLength(value, max)),
   );
 
-export {
-  StringErrorClass,
-  StringMaxLengthError,
-  StringMinLengthError,
-  StringNotOnlyNumbersError,
-  stringValidationPipe,
-};
+export { StringMaxLengthError, StringMinLengthError, StringOnlyNumbersError, stringValidationPipe };

@@ -1,6 +1,6 @@
 /**
- * Represents the error scope of the error. It is used to categorize the error and help to identify
- * the error source.
+ * Represents the error scope. It is used to categorize the error and help to identify the error
+ * source, so it can be handled properly by a higher layer.
  */
 export type ErrorScope =
   /**
