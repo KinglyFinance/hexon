@@ -1,15 +1,4 @@
-import { type Metadata } from '@hexon/generics';
-
 import type { ErrorCode, ErrorData, ErrorParams, ErrorScope } from './types';
-
-/**
- * Error metadata that provides information about the error class.
- */
-const metadata: Metadata = {
-  name: 'ErrorClass',
-  description: 'Hexon error class for error handling and logging.',
-  version: '0.2.0',
-};
 
 /**
  * Error base class that extends the native Error. It provides additional properties like scope,
@@ -24,7 +13,6 @@ export class ErrorClass<
   S extends ErrorScope,
   D extends ErrorData,
 > extends Error {
-  public readonly $metadata = metadata;
   public readonly scope: S;
   public readonly code: C;
   public readonly data?: D;

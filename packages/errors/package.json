@@ -1,6 +1,6 @@
 {
   "name": "@hexon/errors",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "dependencies": {
     "@swc/helpers": "~0.5.11"
   },
