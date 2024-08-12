@@ -1,7 +1,7 @@
 {
-  "name": "generics",
+  "name": "common",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "packages/generics/src",
+  "sourceRoot": "packages/common/src",
   "projectType": "library",
   "release": {
     "version": {
@@ -17,10 +17,10 @@
       "executor": "@nx/js:swc",
       "outputs": ["{options.outputPath}"],
       "options": {
-        "outputPath": "dist/packages/generics",
-        "main": "packages/generics/src/index.ts",
-        "tsConfig": "packages/generics/tsconfig.lib.json",
-        "assets": ["packages/generics/*.md"]
+        "outputPath": "dist/packages/common",
+        "main": "packages/common/src/index.ts",
+        "tsConfig": "packages/common/tsconfig.lib.json",
+        "assets": ["packages/common/*.md"]
       }
     },
     "nx-release-publish": {

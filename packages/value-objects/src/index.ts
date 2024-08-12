@@ -1,1 +1,1 @@
-export * from './lib/value-objects';
+export type * from './lib/types';

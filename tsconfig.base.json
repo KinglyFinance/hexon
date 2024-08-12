@@ -16,6 +16,7 @@
     "esModuleInterop": true,
     "baseUrl": ".",
     "paths": {
+      "@hexon/common": ["packages/common/src/index.ts"],
       "@hexon/errors": ["packages/errors/src/index.ts"],
       "@hexon/value-objects": ["packages/value-objects/src/index.ts"]
     }

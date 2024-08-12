@@ -17,12 +17,12 @@ if (swcJestConfig.swcrc === undefined) {
 // swcJestConfig.module.noInterop = false;
 
 export default {
-  displayName: 'generics',
+  displayName: 'common',
   preset: '../../jest.preset.js',
   transform: {
     '^.+\\.[tj]s$': ['@swc/jest', swcJestConfig],
   },
   moduleFileExtensions: ['ts', 'js', 'html'],
   testEnvironment: 'node',
-  coverageDirectory: '../../coverage/packages/generics',
+  coverageDirectory: '../../coverage/packages/common',
 };

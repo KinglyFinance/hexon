@@ -1,6 +1,6 @@
 {
-  "name": "@hexon/generics",
-  "version": "0.1.0",
+  "name": "@hexon/common",
+  "version": "0.0.1",
   "dependencies": {
     "@swc/helpers": "~0.5.11"
   },
