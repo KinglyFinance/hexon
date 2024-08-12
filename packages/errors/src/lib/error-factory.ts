@@ -38,16 +38,6 @@ import type { ErrorCode, ErrorData, ErrorMapper, ErrorParams, ErrorScope } from 
  *    message: 'The string length is invalid',
  *    data: { value: 'test' }
  * });
- *
- * // Check the error instance.
- * console.log(error instanceof ErrorClass); // Output: true
- * console.log(error instanceof StringLengthError); // Output: true
- * console.log(error.scope); // Output: 'VALUE_OBJECT_ERROR'
- * console.log(error.code); // Output: 'STRING_LENGTH_ERROR'
- * console.log(error.data); // Output: { value: 'test' }
- * console.log(error.message); // Output: 'The string length is invalid'
- * console.log(error.name); // Output: 'StringLengthError'
- * console.log(error.stack); // Output: Error stack trace
  * ```
  */
 export function ErrorFactory<M extends ErrorMapper, D extends ErrorData = undefined>(codes: M) {
