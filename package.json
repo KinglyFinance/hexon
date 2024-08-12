@@ -5,6 +5,7 @@
   "scripts": {
     "lint": "nx lint",
     "test": "nx test",
+    "test:all": "nx run-many --all --target=test",
     "create:package": "./scripts/create-package.sh"
   },
   "private": true,
