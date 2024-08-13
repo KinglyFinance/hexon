@@ -23,6 +23,9 @@ export default {
     '^.+\\.[tj]s$': ['@swc/jest', swcJestConfig],
   },
   moduleFileExtensions: ['ts', 'js', 'html'],
+  // This is specific for nanoid package, which is not ESM compatible.
+  // Ref: https://github.com/ai/nanoid/issues/363#issuecomment-1159442831
+  transformIgnorePatterns: ['../../node_modules/(?!(nanoid))'],
   testEnvironment: 'node',
   coverageDirectory: '../../coverage/packages/value-objects',
 };

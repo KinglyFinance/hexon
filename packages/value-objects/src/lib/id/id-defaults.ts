@@ -1,3 +1,4 @@
+import { nanoid } from 'nanoid';
 import { ulid } from 'ulid';
 import { v4 as uuid } from 'uuid';
 
@@ -14,3 +15,11 @@ export const uuidDefault = () => uuid();
  * @returns A new ULID.
  */
 export const ulidDefault = () => ulid();
+
+/**
+ * Default generator for nanoids. It uses the default nanoid implementation which is 21 characters
+ * long and the same collision probability as a UUID.
+ *
+ * @returns A new nanoid.
+ */
+export const nanoIdDefault = () => nanoid();

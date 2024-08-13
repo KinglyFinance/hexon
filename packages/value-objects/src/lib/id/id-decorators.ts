@@ -1,7 +1,7 @@
 import { DefaultValueFn } from '../value-object-default-decorator';
 import { type ValueObjectType } from '../value-object-type';
-import { ulidDefault, uuidDefault } from './id-defaults';
-import { ulidFormatValidator, uuidFormatValidator } from './id-validators';
+import { nanoIdDefault, ulidDefault, uuidDefault } from './id-defaults';
+import { nanoIdFormatValidator, ulidFormatValidator, uuidFormatValidator } from './id-validators';
 
 /**
  * Decorator that sets the default value function of a UUID.
@@ -30,5 +30,20 @@ export function UlidFormatValidator() {
   return function (target: ValueObjectType) {
     const ulidValidator = (value: string) => ulidFormatValidator(value);
     target.addValidation(ulidValidator);
+  };
+}
+
+/**
+ * Decorator that sets the default value function of a nanoid.
+ */
+export const NanoId = () => DefaultValueFn(nanoIdDefault);
+
+/**
+ * Decorator that adds a validation to check the format of a nanoid.
+ */
+export function NanoIdFormatValidator() {
+  return function (target: ValueObjectType) {
+    const nanoIdValidator = (value: string) => nanoIdFormatValidator(value);
+    target.addValidation(nanoIdValidator);
   };
 }

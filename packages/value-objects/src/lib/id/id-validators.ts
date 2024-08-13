@@ -4,7 +4,7 @@ import z from 'zod';
 
 import { E } from '@hexon/common';
 
-import { UlidMalformedError, UuidMalformedError } from './id-errors';
+import { NanoIdMalformedError, UlidMalformedError, UuidMalformedError } from './id-errors';
 
 /**
  * Validates the format of a UUID.
@@ -41,6 +41,30 @@ export const ulidFormatValidator = (value: string): Either.Either<boolean, UlidM
       data: {
         value,
         technique: 'ulid',
+      },
+    }),
+  });
+};
+
+/**
+ * Validates the format of a nanoid.
+ *
+ * @param value - The nanoid to validate.
+ * @returns If the validation fails, it returns a `NanoIdMalformedError`, otherwise it returns `true`.
+ */
+export const nanoIdFormatValidator = (
+  value: string,
+): Either.Either<boolean, NanoIdMalformedError> => {
+  // This is the regex for nanoids.
+  const nanoidRegex = /^[A-Za-z0-9_-]{21}$/;
+
+  return E.toPredicate({
+    predicate: () => z.string().regex(nanoidRegex).safeParse(value).success,
+    error: new NanoIdMalformedError({
+      message: `Invalid nanoid: ${value}`,
+      data: {
+        value,
+        technique: 'nanoId',
       },
     }),
   });

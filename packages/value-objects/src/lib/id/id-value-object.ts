@@ -1,5 +1,12 @@
 import { ValueObjectFactory } from '../value-object-factory';
-import { Ulid, UlidFormatValidator, Uuid, UuidFormatValidator } from './id-decorators';
+import {
+  NanoId,
+  NanoIdFormatValidator,
+  Ulid,
+  UlidFormatValidator,
+  Uuid,
+  UuidFormatValidator,
+} from './id-decorators';
 import type { IdError, UlidMalformedError, UuidMalformedError } from './id-errors';
 
 /**
@@ -31,4 +38,17 @@ export const UlidValueObject = <T>() => {
   @UlidFormatValidator()
   class UlidValueObject extends IdValueObject<T, UlidMalformedError>() {}
   return UlidValueObject;
+};
+
+/**
+ * Value object that stores a nanoid. It contains out-of-the-box default and validation for the
+ * nanoid format.
+ *
+ * @returns A nanoid value object class to be extended.
+ */
+export const NanoIdValueObject = <T>() => {
+  @NanoId()
+  @NanoIdFormatValidator()
+  class NanoIdValueObject extends IdValueObject<T, UlidMalformedError>() {}
+  return NanoIdValueObject;
 };

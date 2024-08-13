@@ -1,10 +1,19 @@
 import { Either } from 'effect';
 
-import { UlidMalformedError, UlidValueObject, UuidMalformedError, UuidValueObject } from '../lib';
+import {
+  NanoIdMalformedError,
+  NanoIdValueObject,
+  UlidMalformedError,
+  UlidValueObject,
+  UuidMalformedError,
+  UuidValueObject,
+} from '../lib';
 
 class UserUuid extends UuidValueObject<UserUuid>() {}
 
 class UserUlid extends UlidValueObject<UserUlid>() {}
+
+class UserNanoId extends NanoIdValueObject<UserNanoId>() {}
 
 describe('Id Value Object', () => {
   /*
@@ -107,6 +116,56 @@ describe('Id Value Object', () => {
       expect(validators).toHaveLength(1);
       expect(validatorsNames).toContain('ulidValidator');
       expect(UserUlid.defaultValueFn).toBeDefined();
+    });
+  });
+
+  describe('NanoId', () => {
+    it('Should create a valid NanoId with default function', () => {
+      const result = UserNanoId.create();
+      expect(Either.isRight(result)).toBeTruthy();
+
+      if (Either.isRight(result)) {
+        const value = result.right;
+        expect(value.value).toBeDefined();
+        expect(value.value).toHaveLength(21);
+      }
+    });
+
+    it('Should create a valid NanoId with the given value', () => {
+      const result = UserNanoId.create('wxKLSocWFFsJ9lcgC5nbi');
+
+      expect(Either.isRight(result)).toBeTruthy();
+
+      if (Either.isRight(result)) {
+        const value = result.right;
+        expect(value.value).toBeDefined();
+        expect(value.value).toHaveLength(21);
+        expect(value.value).toBe('wxKLSocWFFsJ9lcgC5nbi');
+      }
+    });
+
+    it('Should fail to create a NanoId with an invalid format', () => {
+      const result = UserNanoId.create('bad-nanoid');
+
+      expect(Either.isLeft(result)).toBeTruthy();
+
+      if (Either.isLeft(result)) {
+        const error = result.left;
+        expect(error).toBeDefined();
+        expect(error).toBeInstanceOf(NanoIdMalformedError);
+        expect(error.scope).toBe('VALUE_OBJECT_ERROR');
+        expect(error.code).toBe('NANOID_MALFORMED_ERROR');
+        expect(error.data).toEqual({ value: 'bad-nanoid', technique: 'nanoId' });
+      }
+    });
+
+    it('Should have a default value function and 1 validation', () => {
+      const validators = UserNanoId.validationMap.get(UserNanoId.KEY);
+      const validatorsNames = validators?.map((validator) => validator.name);
+
+      expect(validators).toHaveLength(1);
+      expect(validatorsNames).toContain('nanoIdValidator');
+      expect(UserNanoId.defaultValueFn).toBeDefined();
     });
   });
 });
