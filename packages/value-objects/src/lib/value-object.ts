@@ -13,9 +13,6 @@ type ValidationFunction = Func<Either.Either<boolean, ErrorType>>;
  */
 export type DefaultValueFunction<V extends PrimitiveValue> = Func<V>;
 
-/**
- * Value Object abstract class to be extended by other value objects.
- */
 export class ValueObject<V extends PrimitiveValue> {
   protected constructor(
     public readonly value: V,
@@ -26,7 +23,7 @@ export class ValueObject<V extends PrimitiveValue> {
    * A unique key for the value object. It is used to store the validation functions for each
    * value object and future features that require a unique key.
    */
-  static KEY = Symbol(this.name);
+  static KEY = Symbol();
 
   /**
    * A map that contains the validation functions for each value object.

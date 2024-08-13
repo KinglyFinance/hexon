@@ -10,6 +10,9 @@ import { ValueObject } from './value-object';
  */
 export function ValueObjectFactory<T, V extends PrimitiveValue, E extends ErrorType>() {
   return class extends ValueObject<V> {
+    // Override the KEY property to be a unique symbol for the value object.
+    static override KEY = Symbol();
+
     /**
      * Creates a new value object for the given value (if provided) and validates it. If the
      * the value is not provided, it uses the default value function to create the value object.
