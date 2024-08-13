@@ -1,3 +1,4 @@
+import { ulid } from 'ulid';
 import { v4 as uuid } from 'uuid';
 
 /**
@@ -6,3 +7,10 @@ import { v4 as uuid } from 'uuid';
  * @returns A new UUID.
  */
 export const uuidDefault = () => uuid();
+
+/**
+ * Default generator for ULIDs.
+ *
+ * @returns A new ULID.
+ */
+export const ulidDefault = () => ulid();
