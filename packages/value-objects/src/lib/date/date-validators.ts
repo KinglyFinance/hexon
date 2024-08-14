@@ -31,7 +31,7 @@ export const dateIsValidValidator = (value: Date): Either.Either<boolean, DateIn
   });
 
 /**
- * Validates if a date is in the future.
+ * Validates if a date is in the past.
  *
  * @param value - The date to validate.
  * @returns If the validation fails, it returns a `DateFutureError`, otherwise it returns `true`.

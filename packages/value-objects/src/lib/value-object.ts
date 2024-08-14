@@ -13,6 +13,11 @@ type ValidationFunction = Func<Either.Either<boolean, ErrorType>>;
  */
 export type DefaultValueFunction<V extends PrimitiveValue> = Func<V>;
 
+/**
+ * Represents a value object that is part of a domain entity. It is a wrapper around a primitive
+ * value but with vitamins. It encapsulates the the business rules and the validation logic of the
+ * value through a set of validation functions.
+ */
 export class ValueObject<V extends PrimitiveValue> {
   protected constructor(
     public readonly value: V,
