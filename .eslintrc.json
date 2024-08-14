@@ -39,6 +39,23 @@
         "jest": true
       },
       "rules": {}
+    },
+    {
+      "files": ["*.json"],
+      "parser": "jsonc-eslint-parser",
+      "rules": {
+        "@nx/dependency-checks": [
+          "error",
+          {
+            "ignoredDependencies": [
+              "@hexon/common",
+              "@hexon/errors",
+              "@hexon/value-objects",
+              "@hexon/aggregates"
+            ]
+          }
+        ]
+      }
     }
   ]
 }
