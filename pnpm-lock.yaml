@@ -97,6 +97,15 @@ importers:
         specifier: ^5.0.4
         version: 5.32.1(typanion@3.14.0)
 
+  packages/aggregates:
+    dependencies:
+      '@swc/helpers':
+        specifier: ~0.5.11
+        version: 0.5.12
+      uuid:
+        specifier: ^10.0.0
+        version: 10.0.0
+
   packages/common:
     dependencies:
       '@swc/helpers':
