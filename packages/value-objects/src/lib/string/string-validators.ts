@@ -27,7 +27,7 @@ export const stringLengthValidator = (
   E.toPredicate({
     predicate: () => z.string().length(length).safeParse(value).success,
     error: new StringLengthError({
-      message: `Invalid length for string: ${value}`,
+      message: `The length must be ${length}: ${value}`,
       data: { value },
     }),
   });
@@ -46,7 +46,7 @@ export const stringMinLengthValidator = (
   E.toPredicate({
     predicate: () => z.string().min(min).safeParse(value).success,
     error: new StringMinLengthError({
-      message: `Invalid min length for string: ${value}`,
+      message: `The minimum length must be ${min}: ${value}`,
       data: { value },
     }),
   });
@@ -65,7 +65,7 @@ export const stringMaxLengthValidator = (
   E.toPredicate({
     predicate: () => z.string().max(max).safeParse(value).success,
     error: new StringMaxLengthError({
-      message: `Invalid max length for string: ${value}`,
+      message: `The maximum length must be ${max}: ${value}`,
       data: { value },
     }),
   });
@@ -103,7 +103,7 @@ export const stringStartsWithValidator = (
   E.toPredicate({
     predicate: () => z.string().startsWith(start).safeParse(value).success,
     error: new StringStartsWithError({
-      message: `Invalid start for string: ${value}`,
+      message: `It must start with: ${start}: ${value}`,
       data: { value },
     }),
   });
@@ -122,7 +122,7 @@ export const stringEndsWithValidator = (
   E.toPredicate({
     predicate: () => z.string().endsWith(end).safeParse(value).success,
     error: new StringEndsWithError({
-      message: `Invalid end for string: ${value}`,
+      message: `It must end with: ${end}: ${value}`,
       data: { value },
     }),
   });
@@ -141,7 +141,7 @@ export const stringIncludesValidator = (
   E.toPredicate({
     predicate: () => z.string().includes(includes).safeParse(value).success,
     error: new StringIncludesError({
-      message: `Invalid contains for string: ${value}`,
+      message: `It must include: ${includes}: ${value}`,
       data: { value },
     }),
   });
