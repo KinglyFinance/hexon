@@ -8,8 +8,27 @@ import { ValueObject } from './value-object';
 /**
  * Factory that creates a value object for the given type.
  */
-export function ValueObjectFactory<T, V extends PrimitiveValue, E extends ErrorType>() {
-  return class extends ValueObject<V> {
+export function ValueObjectFactory<
+  // The type is the type of the value object it self, it's used to define the type of the create
+  // method. For instance, if the value object class is a UserId, the type will be the UserId class
+  // and not the extended class like UlidValueObject.
+  T,
+  // The value is the primitive value that the value object will store. It can be a string, number,
+  // boolean, or any other primitive value.
+  V extends PrimitiveValue,
+  // The create error type is the error type that will be returned when the value object creation
+  // fails. It must be a valid error type.
+  E extends ErrorType,
+  // The optional flag indicates if the value is optional or not. If true, the value can be
+  // undefined or null, otherwise it must be a valid value. If it's optional, the create method
+  // will not require a value and will use the default value function to create the value object.
+  // Obviously, the default value function must be provided in this case.
+  O extends boolean = false,
+>() {
+  // The create method can receive a value or not, depending on the optional flag.
+  type CreateParam = O extends true ? [value?: V] : [value: V];
+
+  return class ValueObjectClass extends ValueObject<V> {
     // Override the KEY property to be a unique symbol for the value object.
     static override KEY = Symbol();
 
@@ -21,7 +40,10 @@ export function ValueObjectFactory<T, V extends PrimitiveValue, E extends ErrorT
      * @returns A new value object instance if the validation passes, otherwise the respective
      * validation error.
      */
-    public static create(value?: V): Either.Either<T, E> {
+    public static create(...args: CreateParam): Either.Either<T, E> {
+      // The value always will be the first argument.
+      const value = args[0];
+
       const useDefaultFn = value === undefined || value === null;
 
       // Mandatory check for the default value function.

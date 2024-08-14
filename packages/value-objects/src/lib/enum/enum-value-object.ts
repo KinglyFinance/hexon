@@ -20,8 +20,15 @@ export type EnumType = Record<EnumKeyType, PrimitiveValue>;
  *
  * @returns An enum value object factory class to be extended.
  */
-const EnumValueObjectFactory = <T, V extends EnumKeyType, E extends EnumError>() =>
-  ValueObjectFactory<T, V, E>();
+const EnumValueObjectFactory = <
+  T,
+  // The value should be a key of the enum.
+  V extends EnumKeyType,
+  // On creation error, the returned if fails will be of type E extends `EnumError`.
+  E extends EnumError,
+  // By default the value is mandatory on his creation.
+  O extends boolean = false,
+>() => ValueObjectFactory<T, V, E, O>();
 
 /**
  * Represents an enum value object type with his attributes.
@@ -57,11 +64,12 @@ export const EnumValueObject = <
   T,
   L extends EnumType,
   K extends EnumKeyType = keyof L extends EnumKeyType ? keyof L : never,
+  O extends boolean = false,
 >(
   enumDefinition: L,
 ) => {
   @EnumContains()
-  class EnumValueObject extends EnumValueObjectFactory<T, K, EnumError>() {
+  class EnumValueObject extends EnumValueObjectFactory<T, K, EnumError, O>() {
     static readonly allowedValues = Object.values(enumDefinition);
   }
   return EnumValueObject;
