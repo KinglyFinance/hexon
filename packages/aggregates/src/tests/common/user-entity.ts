@@ -56,4 +56,4 @@ const createUser = (name: string, roles: (keyof typeof UserRoleEnum)[]) => {
   );
 };
 
-export { createUser, User, UserId, UserName, UserRole, UserRoleEnum };
+export { createUser, User, UserId, UserName, UserProps, UserRole, UserRoleEnum };
