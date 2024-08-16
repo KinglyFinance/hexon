@@ -18,7 +18,12 @@ export type EntityProps = Record<
   | EntityProperty[]
   | Record<string, EntityProperty>
   | Record<string, EntityProperty[]>
->;
+> & {
+  /**
+   * Unique identifier of the entity. Usually must be an ID value object.
+   */
+  id: ValueObject<string | number>;
+};
 
 /**
  * Represents a generic entity that is part of a domain. Useful for generic definitions or to
@@ -51,7 +56,7 @@ export class Entity<P extends EntityProps> {
    * Transforms the given data of value objects to primitives values. This is useful to
    * serialize the entity to a more simple representation.
    */
-  private static toPrimitives<T extends EntityProps>(props: T): ToPrimitives<T> {
+  public static toPrimitives<T extends EntityProps>(props: T): ToPrimitives<T> {
     // Create a record to store the primitive values.
     const record: Record<string, PrimitiveValue> = {};
 
