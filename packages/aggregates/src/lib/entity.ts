@@ -48,7 +48,7 @@ export class Entity<P extends EntityProps> {
   /**
    * Returns the primitive values of the entity.
    */
-  public get primitives() {
+  public get primitives(): ToPrimitives<P> {
     return Entity.toPrimitives(this.props);
   }
 
@@ -56,7 +56,7 @@ export class Entity<P extends EntityProps> {
    * Transforms the given data of value objects to primitives values. This is useful to
    * serialize the entity to a more simple representation.
    */
-  public static toPrimitives<T extends EntityProps>(props: T): ToPrimitives<T> {
+  protected static toPrimitives<P extends EntityProps>(props: P) {
     // Create a record to store the primitive values.
     const record: Record<string, PrimitiveValue> = {};
 
@@ -90,6 +90,6 @@ export class Entity<P extends EntityProps> {
       }
     }
 
-    return record as ToPrimitives<T>;
+    return record as ToPrimitives<P>;
   }
 }
