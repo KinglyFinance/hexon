@@ -1,6 +1,6 @@
 import { v4 as uuid } from 'uuid';
 
-import { Entity, type EntityProps } from './entity';
+import { type EntityProps } from './entity';
 import { type ToPrimitives } from './generics';
 
 /**
@@ -8,6 +8,12 @@ import { type ToPrimitives } from './generics';
  * separated by underscores. The code must end with the suffix '_EVENT'.
  */
 export type EventCode = Uppercase<`${string}_EVENT`>;
+
+/**
+ * Represents the payload of an event. The payload is a partial representation of the entity
+ * properties that are relevant to the event.
+ */
+export type EventPayload<P extends EntityProps> = Partial<ToPrimitives<P>>;
 
 /**
  * A domain event is a representation of a change in the state of an entity or an aggregate, or a
@@ -31,13 +37,17 @@ export class Event<
   public readonly uuid: string;
   public readonly timestamp: Date;
   public readonly name: string;
-  public readonly code: C;
-  public readonly payload: ToPrimitives<P>;
 
   /**
    * Creates a new event with the given code and data.
+   *
+   * @param code - Code of the event.
+   * @param payload - Data related to the event.
    */
-  constructor(code: C, payload: P) {
+  constructor(
+    public readonly code: C,
+    public readonly payload: EventPayload<P>,
+  ) {
     // Auto generate uuid and timestamp.
     this.uuid = uuid();
     this.timestamp = new Date();
@@ -48,9 +58,6 @@ export class Event<
       .split('_')
       .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
       .join('');
-
-    // The payload is transformed to primitives to value objects classes.
-    this.payload = Entity.toPrimitives(payload);
   }
 
   /**

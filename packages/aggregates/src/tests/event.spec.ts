@@ -6,7 +6,14 @@ describe('Event', () => {
   it('Should create an event with the given code and data', () => {
     const createEvent = pipe(
       createUser('John Doe', ['ADMIN', 'USER']),
-      Either.map(({ id, name, roles }) => new UserEvent('USER_CREATED_EVENT', { id, name, roles })),
+      Either.map(
+        ({ id, name, roles }) =>
+          new UserEvent('USER_CREATED_EVENT', {
+            id: id.value,
+            name: name.value,
+            roles: roles.map((role) => role.value),
+          }),
+      ),
     );
 
     expect(Either.isRight(createEvent)).toBeTruthy();
@@ -38,7 +45,14 @@ describe('Event', () => {
   it('Should create an event with the given other code and data', () => {
     const createEvent = pipe(
       createUser('John Doe', ['ADMIN', 'USER']),
-      Either.map(({ id, name, roles }) => new UserEvent('USER_DELETED_EVENT', { id, name, roles })),
+      Either.map(
+        ({ id, name, roles }) =>
+          new UserEvent('USER_DELETED_EVENT', {
+            id: id.value,
+            name: name.value,
+            roles: roles.map((role) => role.value),
+          }),
+      ),
     );
 
     expect(Either.isRight(createEvent)).toBeTruthy();
