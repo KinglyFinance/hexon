@@ -1,10 +1,9 @@
-import { type EntityProperty, type EntityProps, type EntityType } from '../entity';
+import { type EntityProperty, type EntityProps } from '../entity';
 
 /**
- * Infers the value objects primitives types of a Entity. It supports arrays of value objects or
- * null props.
+ * Infers the value objects primitives of a entity properties.
  */
-export type ToPrimitives<T extends EntityType | EntityProps> = {
+export type ToPrimitives<T extends EntityProps> = {
   [K in keyof T as T[K] extends EntityProperty | EntityProperty[] | null
     ? K
     : never]: T[K] extends { value: infer V }
